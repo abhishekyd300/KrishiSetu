@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Farmer Direct Market</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div class="container" style="max-width: 500px; padding-top: 3rem; padding-bottom: 3rem;">
+    <div class="card">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🌱</div>
+        <h1 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Create account</h1>
+        <p style="color: var(--text-light); font-size: 0.9rem;">Join Farmer Direct today</p>
+      </div>
+
+      <% if (error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+      <% } %>
+
+      <!-- Role selector -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="role-card" data-role="buyer" style="padding: 1.25rem; border: 2px solid var(--primary); border-radius: 0.75rem; cursor: pointer; text-align: center; background: var(--secondary);">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🛒</div>
+          <div style="font-weight: 600; margin-bottom: 0.25rem;">I'm a Buyer</div>
+          <div style="font-size: 0.75rem; color: var(--text-light);">Browse & order crops</div>
+        </div>
+        <div class="role-card" data-role="farmer" style="padding: 1.25rem; border: 2px solid var(--border); border-radius: 0.75rem; cursor: pointer; text-align: center;">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🧑‍🌾</div>
+          <div style="font-weight: 600; margin-bottom: 0.25rem;">I'm a Farmer</div>
+          <div style="font-size: 0.75rem; color: var(--text-light);">List & sell crops</div>
+        </div>
+      </div>
+
+      <form action="/auth/register" method="POST">
+        <input type="hidden" name="role" id="role" value="buyer">
+
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" required placeholder="Ramesh Patel">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required placeholder="you@example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required minlength="6" placeholder="At least 6 characters">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          Register as <span id="role-label">Buyer</span>
+        </button>
+      </form>
+
+      <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-light);">
+        Already have an account? 
+        <a href="/auth/login" style="color: var(--primary); font-weight: 500;">Log in</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const roleCards = document.querySelectorAll('.role-card');
+    const roleInput = document.getElementById('role');
+    const roleLabel = document.getElementById('role-label');
+
+    roleCards.forEach(card => {
+      card.addEventListener('click', () => {
+        roleCards.forEach(c => {
+          c.style.border = '2px solid var(--border)';
+          c.style.background = 'white';
+        });
+        card.style.border = '2px solid var(--primary)';
+        card.style.background = 'var(--secondary)';
+        
+        const role = card.dataset.role;
+        roleInput.value = role;
+        roleLabel.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+      });
+    });
+  </script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

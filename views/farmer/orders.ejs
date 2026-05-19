@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>My Orders</h1>
+      <p>Incoming orders from buyers</p>
+    </div>
+
+    <% if (orders.length === 0) { %>
+      <div class="card" style="text-align: center; padding: 3rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">📦</div>
+        <h3 style="margin-bottom: 0.75rem;">No orders yet</h3>
+        <p style="color: var(--text-light);">Orders will appear here when buyers purchase your crops</p>
+      </div>
+    <% } else { %>
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Crop</th>
+              <th>Buyer</th>
+              <th>Quantity</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% orders.forEach(order => { %>
+              <tr>
+                <td><code>#<%= order._id.toString().slice(-6) %></code></td>
+                <td><%= order.cropName %></td>
+                <td>
+                  <%= order.buyer.name %><br>
+                  <small style="color: var(--text-light);"><%= order.buyer.phone || order.buyer.email %></small>
+                </td>
+                <td><%= order.quantity %> <%= order.listing.unit || 'kg' %></td>
+                <td style="font-weight: 600;">₹<%= order.totalAmount.toLocaleString('en-IN') %></td>
+                <td>
+                  <% if (order.status === 'pending') { %>
+                    <span class="badge badge-warning">Payment Pending</span>
+                  <% } else if (order.status === 'payment_held') { %>
+                    <span class="badge badge-success">Paid (Escrow)</span>
+                  <% } else if (order.status === 'dispatched') { %>
+                    <span class="badge badge-info">Dispatched</span>
+                  <% } else if (order.status === 'delivered') { %>
+                    <span class="badge badge-success">Delivered</span>
+                  <% } else if (order.status === 'completed') { %>
+                    <span class="badge badge-success">Completed ✓</span>
+                  <% } else if (order.status === 'cancelled') { %>
+                    <span class="badge badge-danger">Cancelled</span>
+                  <% } else { %>
+                    <span class="badge"><%= order.status %></span>
+                  <% } %>
+                </td>
+                <td><%= new Date(order.createdAt).toLocaleDateString('en-IN') %></td>
+                <td>
+                  <% if (order.status === 'pending' || order.status === 'payment_held') { %>
+                    <form action="/farmer/orders/<%= order._id %>/dispatch" method="POST">
+                      <button type="submit" class="btn btn-primary btn-sm">Mark Dispatched</button>
+                    </form>
+                  <% } else if (order.status === 'dispatched') { %>
+                    <span style="font-size: 0.8rem; color: var(--text-light);">Awaiting delivery</span>
+                  <% } else { %>
+                    <span style="font-size: 0.8rem; color: var(--text-light);">—</span>
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

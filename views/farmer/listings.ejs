@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div class="container">
+    <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1>My Crop Listings</h1>
+        <p>Manage your crops for sale</p>
+      </div>
+      <a href="/farmer/listings/new" class="btn btn-primary">+ Add New Crop</a>
+    </div>
+
+    <% if (listings.length === 0) { %>
+      <div class="card" style="text-align: center; padding: 3rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🌾</div>
+        <h3 style="margin-bottom: 0.75rem;">No listings yet</h3>
+        <p style="color: var(--text-light); margin-bottom: 1.5rem;">Start by adding your first crop listing</p>
+        <a href="/farmer/listings/new" class="btn btn-primary">Add Crop Listing</a>
+      </div>
+    <% } else { %>
+      <div class="card-grid">
+        <% listings.forEach(listing => { %>
+          <div class="listing-card">
+            <% if (listing.images && listing.images.length > 0) { %>
+              <img src="<%= listing.images[0] %>" alt="<%= listing.cropName %>">
+            <% } else { %>
+              <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #dcfce7, #86efac); display: flex; align-items: center; justify-content: center; font-size: 3rem;">🌿</div>
+            <% } %>
+            
+            <div class="listing-card-body">
+              <h3><%= listing.cropName %></h3>
+              <span class="badge badge-<%= listing.status === 'active' ? 'success' : 'warning' %>">
+                <%= listing.status %>
+              </span>
+              <p class="price">₹<%= listing.pricePerUnit %>/<%= listing.unit %></p>
+              <div class="meta">
+                <span><%= listing.quantity %> <%= listing.unit %> left</span>
+                <% if (listing.organic) { %>
+                  <span class="badge badge-success">Organic</span>
+                <% } %>
+              </div>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+                <form action="/farmer/listings/<%= listing._id %>?_method=DELETE" method="POST" style="flex: 1;" onsubmit="return confirm('Delete this listing?')">
+                  <button type="submit" class="btn btn-danger btn-sm" style="width: 100%;">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

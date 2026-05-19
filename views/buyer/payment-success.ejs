@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div class="container" style="max-width: 600px; text-align: center; padding: 4rem 1.5rem;">
+    <div class="card">
+      <div style="width: 80px; height: 80px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2.5rem;">
+        ✅
+      </div>
+
+      <h1 style="font-size: 1.75rem; margin-bottom: 0.75rem; color: var(--primary);">
+        Payment Successful!
+      </h1>
+      
+      <p style="font-size: 1rem; color: var(--text-light); margin-bottom: 2rem; line-height: 1.6;">
+        Your payment has been received and held securely in escrow. The farmer will be notified to dispatch your order.
+      </p>
+
+      <div style="background: #dbeafe; padding: 1.25rem; border-radius: 0.5rem; margin-bottom: 2rem; text-align: left;">
+        <h3 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: #1e40af;">
+          What happens next?
+        </h3>
+        <ol style="font-size: 0.85rem; color: #1e40af; margin-left: 1.25rem; line-height: 1.8;">
+          <li>Farmer receives notification to prepare your order</li>
+          <li>Your payment is held securely (escrow protection)</li>
+          <li>Farmer marks order as "Dispatched" when shipped</li>
+          <li>You confirm delivery after receiving the order</li>
+          <li>Payment is released to the farmer</li>
+        </ol>
+      </div>
+
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/buyer/orders" class="btn btn-primary">View My Orders</a>
+        <a href="/buyer/dashboard" class="btn btn-outline">Browse More Crops</a>
+      </div>
+
+      <p style="font-size: 0.75rem; color: var(--text-light); margin-top: 2rem;">
+        You can track your order status in "My Orders" section.
+      </p>
+    </div>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

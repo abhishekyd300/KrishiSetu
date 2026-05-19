@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div class="container" style="max-width: 600px;">
+    <div class="page-header">
+      <h1>Payment Methods</h1>
+      <p>Configure where you want to receive your payouts</p>
+    </div>
+
+    <% if (success && success.length > 0) { %>
+      <div class="alert alert-success">
+        <%= success %>
+      </div>
+    <% } %>
+    
+    <% if (error && error.length > 0) { %>
+      <div class="alert alert-danger">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <div class="card">
+      <h2 style="font-size: 1.25rem; margin-bottom: 1.5rem;">Bank Details / UPI</h2>
+      <form action="/farmer/bank-details" method="POST">
+        <div class="form-group">
+          <label for="accountName">Account Holder Name</label>
+          <input type="text" id="accountName" name="accountName" value="<%= farmer.bankDetails?.accountName || '' %>" placeholder="E.g., Ramesh Kumar">
+        </div>
+
+        <div class="form-group">
+          <label for="accountNumber">Bank Account Number</label>
+          <input type="text" id="accountNumber" name="accountNumber" value="<%= farmer.bankDetails?.accountNumber || '' %>" placeholder="E.g., 123456789012">
+        </div>
+
+        <div class="form-group">
+          <label for="ifscCode">IFSC Code</label>
+          <input type="text" id="ifscCode" name="ifscCode" value="<%= farmer.bankDetails?.ifscCode || '' %>" placeholder="E.g., HDFC0001234">
+        </div>
+
+        <div style="margin: 1.5rem 0; text-align: center; color: var(--text-light); font-weight: 500;">
+          OR
+        </div>
+
+        <div class="form-group">
+          <label for="upiId">UPI ID</label>
+          <input type="text" id="upiId" name="upiId" value="<%= farmer.bankDetails?.upiId || '' %>" placeholder="E.g., ramesh@okhdfcbank">
+        </div>
+
+        <div style="background: #fdf2f8; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #be185d;">
+          ⚠️ <strong>Note:</strong> Payouts for delivered orders will be processed directly to the configured account. Make sure the details are correct.
+        </div>
+
+        <div style="display: flex; gap: 1rem;">
+          <button type="submit" class="btn btn-primary" style="flex: 1;">Save Payment Details</button>
+          <a href="/farmer/dashboard" class="btn btn-outline">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

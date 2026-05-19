@@ -1,0 +1,30 @@
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <span style="font-size: 1.75rem;">🌱</span>
+      <span>KrishiSetu</span>
+    </a>
+
+    <nav>
+      <% if (!user) { %>
+        <a href="/">Home</a>
+        <a href="/auth/login">Login</a>
+        <a href="/auth/register" class="btn btn-primary btn-sm">Register</a>
+        <% } else { %>
+          <% if (user.role==='farmer' ) { %>
+            <a href="/farmer/dashboard">Dashboard</a>
+            <a href="/farmer/listings">My Crops</a>
+            <a href="/farmer/orders">Orders</a>
+            <a href="/farmer/bank-details">Payouts</a>
+            <% } else { %>
+              <a href="/buyer/dashboard">Browse</a>
+              <a href="/buyer/orders">My Orders</a>
+              <% } %>
+                <span style="color: #9ca3af;">|</span>
+                <span style="font-weight: 500; font-size: 0.9rem;">
+                  <%= user.name.split(' ')[0] %></span>
+        <a href="/auth/logout" style="color: #ef4444;">Logout</a>
+      <% } %>
+    </nav>
+  </div>
+</nav>

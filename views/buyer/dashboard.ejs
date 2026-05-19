@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Browse Fresh Crops</h1>
+      <p>Direct from farmers near you</p>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="card">
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Search crops..." 
+          style="flex: 1; min-width: 250px; padding: 0.65rem 0.9rem; border: 1px solid var(--border); border-radius: 0.5rem;"
+        >
+        <select id="categoryFilter" style="padding: 0.65rem 0.9rem; border: 1px solid var(--border); border-radius: 0.5rem;">
+          <option value="all">All Categories</option>
+          <option value="vegetables">Vegetables</option>
+          <option value="fruits">Fruits</option>
+          <option value="grains">Grains</option>
+          <option value="pulses">Pulses</option>
+          <option value="spices">Spices</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+
+    <% if (listings.length === 0) { %>
+      <div class="card" style="text-align: center; padding: 3rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🌾</div>
+        <h3 style="margin-bottom: 0.75rem;">No listings available</h3>
+        <p style="color: var(--text-light);">Check back soon for fresh crops from farmers</p>
+      </div>
+    <% } else { %>
+      <div class="card-grid" id="listingsGrid">
+        <% listings.forEach(listing => { %>
+          <div class="listing-card" data-category="<%= listing.category %>" data-name="<%= listing.cropName.toLowerCase() %>">
+            <% if (listing.images && listing.images.length > 0) { %>
+              <img src="<%= listing.images[0] %>" alt="<%= listing.cropName %>">
+            <% } else { %>
+              <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #dcfce7, #86efac); display: flex; align-items: center; justify-content: center; font-size: 3rem;">🌿</div>
+            <% } %>
+            
+            <div class="listing-card-body">
+              <h3><%= listing.cropName %></h3>
+              <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.25rem 0;">
+                By <%= listing.farmer.name %>
+                <% if (listing.farmer.rating > 0) { %>
+                  <span style="color: #f59e0b;">★ <%= listing.farmer.rating.toFixed(1) %></span>
+                <% } %>
+              </p>
+              <p class="price">₹<%= listing.pricePerUnit %>/<%= listing.unit %></p>
+              <div class="meta">
+                <span><%= listing.quantity %> <%= listing.unit %> available</span>
+                <% if (listing.organic) { %>
+                  <span class="badge badge-success">Organic</span>
+                <% } %>
+              </div>
+              <a href="/buyer/listing/<%= listing._id %>" class="btn btn-primary btn-sm" style="width: 100%; margin-top: 0.75rem; text-align: center;">View Details</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const cards = document.querySelectorAll('.listing-card');
+
+    function filterListings() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const category = categoryFilter.value;
+
+      cards.forEach(card => {
+        const name = card.dataset.name;
+        const cardCategory = card.dataset.category;
+        
+        const matchesSearch = name.includes(searchTerm);
+        const matchesCategory = category === 'all' || cardCategory === category;
+
+        card.style.display = matchesSearch && matchesCategory ? 'block' : 'none';
+      });
+    }
+
+    searchInput.addEventListener('input', filterListings);
+    categoryFilter.addEventListener('change', filterListings);
+  </script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

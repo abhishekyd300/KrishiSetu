@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Welcome, <%= user.name.split(' ')[0] %> 👋</h1>
+      <p>Manage your crop listings and orders</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="icon">🌿</div>
+        <div class="value"><%= activeListings %></div>
+        <div class="label">Active Listings</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="icon">📦</div>
+        <div class="value"><%= pendingOrders %></div>
+        <div class="label">Pending Orders</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="icon">💰</div>
+        <div class="value">₹<%= totalEarned.toLocaleString('en-IN') %></div>
+        <div class="label">Total Earned</div>
+      </div>
+    </div>
+
+    <div class="card" style="background: var(--secondary); border-color: #86efac;">
+      <h2 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: #15803d;">🚀 Next step</h2>
+      <p style="font-size: 0.9rem; color: #166534; margin-bottom: 1rem;">
+        Add your first crop listing to start selling directly to buyers.
+      </p>
+      <a href="/farmer/listings/new" class="btn btn-primary">Add Crop Listing</a>
+    </div>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
