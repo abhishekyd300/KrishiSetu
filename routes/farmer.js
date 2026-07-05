@@ -110,7 +110,7 @@ router.get('/orders', isAuth, isFarmer, async (req, res) => {
   try {
     const orders = await Order.find({ farmer: req.session.user.id })
       .populate('buyer', 'name email phone')
-      .populate('listing', 'cropName')
+      .populate('listing', 'cropName unit')
       .sort({ createdAt: -1 });
     res.render('farmer/orders', { title: 'My Orders', orders });
   } catch (err) {

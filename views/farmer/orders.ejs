@@ -42,10 +42,10 @@
                 <td><code>#<%= order._id.toString().slice(-6) %></code></td>
                 <td><%= order.cropName %></td>
                 <td>
-                  <%= order.buyer.name %><br>
-                  <small style="color: var(--text-light);"><%= order.buyer.phone || order.buyer.email %></small>
+                  <%= order.buyer ? order.buyer.name : 'Deleted User' %><br>
+                  <small style="color: var(--text-light);"><%= order.buyer ? (order.buyer.phone || order.buyer.email) : 'N/A' %></small>
                 </td>
-                <td><%= order.quantity %> <%= order.listing.unit || 'kg' %></td>
+                <td><%= order.quantity %> <%= (order.listing && order.listing.unit) ? order.listing.unit : 'kg' %></td>
                 <td style="font-weight: 600;">₹<%= order.totalAmount.toLocaleString('en-IN') %></td>
                 <td>
                   <% if (order.status === 'pending') { %>
