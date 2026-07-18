@@ -4,46 +4,82 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %></title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.css?v=3">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="dashboard-body">
   <%- include('../partials/navbar') %>
 
-  <div class="container">
-    <div class="page-header">
-      <h1>Welcome, <%= user.name.split(' ')[0] %> 👋</h1>
-      <p>Manage your crop listings and orders</p>
+  <div class="container dashboard-wrapper">
+    <div class="dashboard-header">
+      <h1>Welcome back, <%= user.name.split(' ')[0] %> 👋</h1>
+      <p>Here is a real-time overview of your digital connection to the market</p>
     </div>
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="icon">🌿</div>
-        <div class="value"><%= activeListings %></div>
-        <div class="label">Active Listings</div>
+    <div class="premium-stats-grid">
+      <div class="premium-stat-card">
+        <div class="premium-stat-card-content">
+          <div class="icon-wrapper">🌿</div>
+          <div class="value"><%= activeListings %></div>
+          <div class="label">Active Listings</div>
+        </div>
       </div>
 
-      <div class="stat-card">
-        <div class="icon">📦</div>
-        <div class="value"><%= pendingOrders %></div>
-        <div class="label">Pending Orders</div>
+      <div class="premium-stat-card">
+        <div class="premium-stat-card-content">
+          <div class="icon-wrapper">📦</div>
+          <div class="value"><%= pendingOrders %></div>
+          <div class="label">Pending Orders</div>
+        </div>
       </div>
 
-      <div class="stat-card">
-        <div class="icon">💰</div>
-        <div class="value">₹<%= totalEarned.toLocaleString('en-IN') %></div>
-        <div class="label">Total Earned</div>
+      <div class="premium-stat-card">
+        <div class="premium-stat-card-content">
+          <div class="icon-wrapper">💰</div>
+          <div class="value">₹<%= totalEarned.toLocaleString('en-IN') %></div>
+          <div class="label">Total Earned</div>
+        </div>
       </div>
     </div>
 
-    <div class="card" style="background: var(--secondary); border-color: #86efac;">
-      <h2 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: #15803d;">🚀 Next step</h2>
-      <p style="font-size: 0.9rem; color: #166534; margin-bottom: 1rem;">
-        Add your first crop listing to start selling directly to buyers.
-      </p>
-      <a href="/farmer/listings/new" class="btn btn-primary">Add Crop Listing</a>
+    <div class="premium-action-card">
+      <div class="premium-action-card-content">
+        <h2>🚀 Next Step</h2>
+        <p>
+          Add new listings to connect directly to our digital buyers network. Keep track of crop quality, organic verification, and delivery schedules directly from this interface.
+        </p>
+        <a href="/farmer/listings/new" class="btn btn-primary">Add Crop Listing</a>
+      </div>
     </div>
   </div>
 
   <script src="/js/main.js"></script>
+  <script>
+    // 3D Card Tilt Interaction
+    const cards = document.querySelectorAll('.premium-stat-card, .premium-action-card');
+    
+    cards.forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = ((centerY - y) / centerY) * 12;
+        const rotateY = ((x - centerX) / centerX) * 12;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      });
+    });
+  </script>
 </body>
 </html>

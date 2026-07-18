@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const { isAuth, isFarmer } = require('../middleware/auth');
 const Listing = require('../models/Listing');
 const Order = require('../models/Order');
 const upload = require('../config/multer');
+const imagekit = require('../config/imagekit');
 
 // Dashboard
 router.get('/dashboard', isAuth, isFarmer, async (req, res) => {
@@ -19,7 +21,7 @@ router.get('/dashboard', isAuth, isFarmer, async (req, res) => {
     const totalEarned = await Order.aggregate([
       { 
         $match: { 
-          farmer: require('mongoose').Types.ObjectId(req.session.user.id),
+          farmer: new mongoose.Types.ObjectId(req.session.user.id),
           status: 'completed'
         }
       },
@@ -65,7 +67,17 @@ router.post('/listings', isAuth, isFarmer, upload.array('images', 4), async (req
   try {
     const { cropName, category, pricePerUnit, unit, quantity, description, organic, harvestDate } = req.body;
     
-    const images = req.files ? req.files.map(file => '/' + file.path) : [];
+    const images = [];
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map(file => 
+        imagekit.files.upload({
+          file: file.buffer.toString('base64'),
+          fileName: Date.now() + '-' + file.originalname
+        })
+      );
+      const uploadResults = await Promise.all(uploadPromises);
+      uploadResults.forEach(result => images.push(result.url));
+    }
     
     const listing = new Listing({
       farmer: req.session.user.id,
